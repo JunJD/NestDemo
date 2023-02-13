@@ -11,8 +11,11 @@ export class AnyExceptionFilter implements ExceptionFilter<any> {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
     const request = ctx.getRequest();
-
-    console.log(exception);
+    if(!('getStatus' in exception)){
+      this.handleNoGetStatus(request,response);
+      // console.error(exception)
+      return;
+    }
     response!
       .status(exception.getStatus())
       .json({
@@ -22,4 +25,16 @@ export class AnyExceptionFilter implements ExceptionFilter<any> {
         msg: exception.message.message || exception.message.error || exception.message,
       });
   }
+
+  handleNoGetStatus(request,response){
+    response!
+    .status(500)
+    .json({
+      statusCode: 30001,
+      timestamp: new Date().toISOString(),
+      path: request.url,
+      msg: '系统异常',
+    });
+  }
+
 }

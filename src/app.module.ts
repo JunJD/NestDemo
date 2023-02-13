@@ -4,10 +4,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CorsMiddleware } from './middlewares/cors.middlewares';
 import { User } from './entities/user.entity'; //
-import { UsersModule } from './modules/users/users.module';
+import { UserModule } from './modules/user/user.module';
 @Module({
   imports: [
-    UsersModule,
+    UserModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
