@@ -11,10 +11,12 @@ import { plainToClass } from 'class-transformer';
 export class ValidationPipe implements PipeTransform<any> {
     async transform(value, metadata: ArgumentMetadata) {
       const { metatype } = metadata;
+      console.log(metatype,'metatype')
       if (!metatype || !this.toValidate(metatype)) {
           return value;
       }
       const object = plainToClass(metatype, value);
+      console.log(object,'object')
       const errors = await validate(object);
       if (errors.length > 0) {
           throw new BadRequestException('Validation failed');

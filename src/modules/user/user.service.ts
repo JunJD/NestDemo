@@ -27,6 +27,14 @@ export class UserService implements OnModuleInit {
       return user;
   }
 
+  async signupLocal(user: User): Promise<User> {
+    return  await this.save(user);
+  }
+
+  async save(user: User): Promise<User> {
+    return await this.usersRepository.save(user)
+  }
+
   async findAll(): Promise<User[]> {
     return this.usersRepository.find();
   }

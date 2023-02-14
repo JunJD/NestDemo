@@ -2,7 +2,7 @@
  * @author chenhao
  * @description 角色守卫, 处理当一些路由需要特定的用户角色才能访问的情况
  */
- import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+ import { Injectable, CanActivate, ExecutionContext, HttpException } from '@nestjs/common';
  import { Observable } from 'rxjs';
  import { Reflector } from '@nestjs/core';
 import { Role } from 'src/enum/role.enum';
@@ -24,6 +24,9 @@ import { Role } from 'src/enum/role.enum';
      const request = context.switchToHttp().getRequest();
      const user = request.user;
      const hasRole = () => roles.includes(user.role);
+     if(!(user && user.role && hasRole())){
+      throw new HttpException('该角色无访问的权限', 403);
+     }
      return user && user.role && hasRole();
    }
  }
