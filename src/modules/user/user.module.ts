@@ -14,8 +14,8 @@ import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 @Module({
   imports: [TypeOrmModule.forFeature([User]), forwardRef(() => AuthModule)],
   providers: [
-    CryptoUtil, 
-    UserService, 
+    CryptoUtil,
+    UserService,
     JwtService,
     // {
     //   provide: APP_GUARD,

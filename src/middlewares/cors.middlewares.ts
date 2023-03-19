@@ -3,7 +3,12 @@
  * @file CORS 中间件
  */
 
-import { Injectable, NestMiddleware, HttpStatus, RequestMethod } from '@nestjs/common';
+import {
+  Injectable,
+  NestMiddleware,
+  HttpStatus,
+  RequestMethod,
+} from '@nestjs/common';
 
 /**
  * @class CorsMiddleware
@@ -11,20 +16,40 @@ import { Injectable, NestMiddleware, HttpStatus, RequestMethod } from '@nestjs/c
  */
 @Injectable()
 export class CorsMiddleware implements NestMiddleware {
-  use(request: any, response: any, next: (error?: any) => void)  {
+  use(request: any, response: any, next: (error?: any) => void) {
     // console.log('12112')
-    const getMethod = method => RequestMethod[method];
+    const getMethod = (method) => RequestMethod[method];
     const origin = request.headers.origin || '';
     // const allowedOrigins = [];
-    const allowedMethods = [RequestMethod.GET, RequestMethod.HEAD, RequestMethod.PUT, RequestMethod.PATCH, RequestMethod.POST, RequestMethod.DELETE];
-    const allowedHeaders = ['Engaged-Auth-Token', 'Access-Control-Allow-Headers', 'Access-Control-Allow-Origin', 'Cache-Control', 'Content-Type', 'Authorization', 'Content-Length', 'X-Requested-With', 'withCredentials'];
+    const allowedMethods = [
+      RequestMethod.GET,
+      RequestMethod.HEAD,
+      RequestMethod.PUT,
+      RequestMethod.PATCH,
+      RequestMethod.POST,
+      RequestMethod.DELETE,
+    ];
+    const allowedHeaders = [
+      'Engaged-Auth-Token',
+      'Access-Control-Allow-Headers',
+      'Access-Control-Allow-Origin',
+      'Cache-Control',
+      'Content-Type',
+      'Authorization',
+      'Content-Length',
+      'X-Requested-With',
+      'withCredentials',
+    ];
     // Allow Origin
     // if (!origin || allowedOrigins.includes(origin)) {
     response.setHeader('Access-Control-Allow-Origin', origin || '*');
     // }
     // Headers
     response.header('Access-Control-Allow-Headers', allowedHeaders.join(','));
-    response.header('Access-Control-Allow-Methods',  allowedMethods.map(getMethod).join(','));
+    response.header(
+      'Access-Control-Allow-Methods',
+      allowedMethods.map(getMethod).join(','),
+    );
     response.header('Access-Control-Max-Age', '1728000');
     response.header('Content-Type', 'application/json; charset=utf-8');
     response.header('Cache-Control', 'no-cache');
@@ -35,5 +60,5 @@ export class CorsMiddleware implements NestMiddleware {
     } else {
       return next();
     }
-  };
+  }
 }

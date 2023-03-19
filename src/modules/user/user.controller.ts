@@ -1,4 +1,14 @@
-import { Body, Controller, forwardRef, Get, Inject, Post, Req, UseGuards, UsePipes } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  forwardRef,
+  Get,
+  Inject,
+  Post,
+  Req,
+  UseGuards,
+  UsePipes,
+} from '@nestjs/common';
 import { User } from 'src/entities/user.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from '../auth/auth.service';
@@ -18,27 +28,35 @@ const signupCatSchema = Joi.object({
   email: Joi.string().required(),
   role: Joi.string().required(),
   status: Joi.number(),
-})
+});
 
 const loginCatSchema = Joi.object({
   username: Joi.string().required(),
   password: Joi.string().required(),
-})
+});
 
 @Controller('user')
 export class UserController {
   constructor(
     private readonly userService: UserService,
-    @Inject(forwardRef(() => AuthService)) private readonly authService: AuthService,
+    @Inject(forwardRef(() => AuthService))
+    private readonly authService: AuthService,
   ) {}
 
   @Post('login')
   @UsePipes(new JoiValidationPipe(loginCatSchema))
   @UseGuards(LocalAuthGuard)
-  async login(@Body() body: User): Promise<{data: User,accessToken: {expiresIn: number,accessToken: string}}> {
+  async login(
+    @Body() body: User,
+  ): Promise<{
+    data: User;
+    accessToken: { expiresIn: number; accessToken: string };
+  }> {
     const data = await this.userService.login(body.username, body.password);
-    const accessToken = await this.authService.createToken({ account: body.username });
-    return { data, accessToken }
+    const accessToken = await this.authService.createToken({
+      account: body.username,
+    });
+    return { data, accessToken };
   }
 
   @Get('/auth')
@@ -46,15 +64,22 @@ export class UserController {
   @UseGuards(RolesGuard)
   @UseGuards(JwtAuthGuard)
   async getUser(@Req() req): Promise<string> {
-    return req.user
+    return req.user;
   }
 
   @Public()
   @UsePipes(new JoiValidationPipe(signupCatSchema))
   @Post('signup')
-  async signupLocal(@Body() body: User): Promise<{data: User,accessToken: {expiresIn: number,accessToken: string}}> {
+  async signupLocal(
+    @Body() body: User,
+  ): Promise<{
+    data: User;
+    accessToken: { expiresIn: number; accessToken: string };
+  }> {
     const data = await this.userService.signupLocal(body);
-    const accessToken = await this.authService.createToken({ account: body.username });
-    return { data, accessToken }
+    const accessToken = await this.authService.createToken({
+      account: body.username,
+    });
+    return { data, accessToken };
   }
 }

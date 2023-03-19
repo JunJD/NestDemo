@@ -8,6 +8,7 @@ import { ConfigService } from './config/config.service';
 import * as helmet from 'helmet';
 import * as compression from 'compression';
 import * as rateLimit from 'express-rate-limit';
+import * as bodyParser from 'body-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -16,7 +17,15 @@ async function bootstrap() {
   /**压缩可以大大减小响应正文的大小，从而提高 Web 应用的速度 */
   app.use(compression());
   /**在给定时间段内发出的 API 请求数。如果超过此限制，则在给定时间段完成之前，将不允许应用或用户发出任何 API 请。*/
-  app.use((rateLimit as any)({ windowMs: 15 * 60 * 1000,  max: 100, message: "请求太多,请15分钟后再试" }));
+
+  app.use(bodyParser.json({ limit: '1mb' }));
+  app.use(
+    (rateLimit as any)({
+      windowMs: 15 * 60 * 1000,
+      max: 100,
+      message: '请求太多,请15分钟后再试',
+    }),
+  );
   /**
    * 全局异常拦截器
    */

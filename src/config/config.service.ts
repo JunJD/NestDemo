@@ -4,14 +4,21 @@ import * as path from 'path';
 import * as Joi from 'joi';
 
 export interface EnvConfig {
-    [prop: string]: string;
+  [prop: string]: string;
 }
 
 export class ConfigService {
   private readonly envConfig: EnvConfig;
 
   constructor(configName: string) {
-    const config = dotenv.parse(fs.readFileSync(path.resolve(__dirname, `../../config/${configName??'development'}.env`)));
+    const config = dotenv.parse(
+      fs.readFileSync(
+        path.resolve(
+          __dirname,
+          `../../config/${configName ?? 'development'}.env`,
+        ),
+      ),
+    );
     this.envConfig = this.validateInput(config);
   }
 

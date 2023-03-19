@@ -1,4 +1,4 @@
 export interface Result {
-    code: number;
-    data?: any;
+  code: number;
+  data?: any;
 }

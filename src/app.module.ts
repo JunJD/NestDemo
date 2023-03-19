@@ -5,9 +5,11 @@ import { AppService } from './app.service';
 import { CorsMiddleware } from './middlewares/cors.middlewares';
 import { User } from './entities/user.entity'; //
 import { UserModule } from './modules/user/user.module';
+import { MonitorModule } from './modules/monitor/monitor.module';
 @Module({
   imports: [
     UserModule,
+    MonitorModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
